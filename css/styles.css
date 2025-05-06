@@ -1,0 +1,630 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body {
+    background-color: #e6f7ff; /* Light blue background */
+    color: #006666; /* Dark teal text */
+    min-height: 100vh;
+    padding: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    position: relative;
+}
+
+h1 {
+    position: relative;
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.icon-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #4db6ac; /* Teal background */
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #006666;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.progress-bar {
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.progress-indicator {
+    display: inline-block;
+    padding: 5px 15px;
+    background-color: #4db6ac; /* Teal background */
+    border-radius: 20px;
+    font-size: 14px;
+    color: white;
+}
+
+.button {
+    background-color: #00796b; /* Darker teal button */
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 10px auto;
+    transition: background-color 0.3s ease;
+}
+
+.button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.button:not(:disabled):hover {
+    background-color: #004d40; /* Darker on hover */
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    display: none;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+    max-width: 90%;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: pop-in 0.3s ease-out;
+}
+
+@keyframes pop-in {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.modal-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: #e0f2f1; /* Very light teal */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: #006666;
+    font-size: 30px;
+}
+
+.modal-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.modal-text {
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.modal-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-button {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.primary-button {
+    background-color: #00796b; /* Darker teal */
+    color: white;
+}
+
+.secondary-button {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+/* Authentication styles */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-group input {
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.auth-modal .modal-content {
+    max-width: 400px;
+}
+
+.auth-links {
+    margin-top: 15px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.auth-link {
+    color: #00796b;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.user-email {
+    font-weight: 500;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.logout-button {
+    background: none;
+    border: none;
+    color: #ff5252;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: underline;
+}
+
+/* Task styles */
+.tasks-container {
+    margin-bottom: 20px;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #e0f2f1;
+}
+
+.task-item:last-child {
+    border-bottom: none;
+}
+
+.task-checkbox {
+    margin-right: 12px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #26a69a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: white;
+    transition: all 0.2s ease;
+}
+
+.task-checkbox.completed {
+    background-color: #26a69a;
+}
+
+.task-details {
+    flex-grow: 1;
+}
+
+.task-text {
+    font-size: 16px;
+}
+
+.task-completed-by {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.task-controls {
+    margin-left: 10px;
+    display: flex;
+    gap: 5px;
+}
+
+.task-control-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: none;
+    background-color: #e0e0e0;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.task-control-btn.delete {
+    background-color: #ffcdd2;
+    color: #c62828;
+}
+
+/* Add task form */
+.add-task-form {
+    display: flex;
+    margin-top: 15px;
+    gap: 10px;
+}
+
+.add-task-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.add-task-btn {
+    background-color: #26a69a;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+/* Reward card styles */
+.reward-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.reward-card-item {
+    background-color: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.reward-card-item:hover {
+    transform: translateY(-3px);
+}
+
+.reward-card-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.reward-card-title {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.reward-card-status {
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    background-color: #e0f2f1;
+    color: #00796b;
+}
+
+.reward-card-status.active {
+    background-color: #e0f7fa;
+    color: #0097a7;
+}
+
+.reward-card-status.completed {
+    background-color: #e8f5e9;
+    color: #388e3c;
+}
+
+.reward-card-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+.reward-card-creator {
+    color: #666;
+}
+
+.reward-card-progress {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.mini-progress-bar {
+    width: 50px;
+    height: 6px;
+    background-color: #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.mini-progress-fill {
+    height: 100%;
+    background-color: #26a69a;
+}
+
+/* Sharing styles */
+.share-section {
+    margin-top: 20px;
+}
+
+.share-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.share-input {
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.invitations-list {
+    margin-top: 15px;
+}
+
+.invitation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #e0f2f1;
+}
+
+.invitation-email {
+    font-weight: 500;
+}
+
+.invitation-status {
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    background-color: #fff9c4;
+    color: #ffa000;
+}
+
+.invitation-status.accepted {
+    background-color: #e8f5e9;
+    color: #388e3c;
+}
+
+/* Action bar styles */
+.action-bar {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-top: 1px solid #e0f2f1;
+    margin-top: 20px;
+}
+
+.action-button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.action-button.primary {
+    background-color: #26a69a;
+    color: white;
+}
+
+.action-button.secondary {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+/* Tab navigation */
+.tab-nav {
+    display: flex;
+    border-bottom: 1px solid #e0f2f1;
+    margin-bottom: 15px;
+}
+
+.tab-item {
+    padding: 10px 15px;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+}
+
+.tab-item.active {
+    color: #26a69a;
+    border-bottom-color: #26a69a;
+}
+
+/* Help section */
+.help-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.help-section h3 {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.help-section ul {
+    padding-left: 20px;
+}
+
+.help-section li {
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+/* Amazon products styles */
+.reward-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #e0f2f1;
+    gap: 10px;
+}
+
+.reward-item:last-child {
+    border-bottom: none;
+}
+
+.reward-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.reward-details {
+    flex-grow: 1;
+}
+
+.reward-title {
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.reward-price {
+    font-size: 12px;
+    color: #666;
+}
+
+.amazon-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+/* Affiliate disclosure */
+.affiliate-disclosure {
+    background-color: #f9f9f9;
+    border-left: 4px solid #26a69a;
+    padding: 10px 15px;
+    margin: 15px 0;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.footer-disclosure {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 30px;
+    padding: 15px;
+    border-top: 1px solid #e0f2f1;
+}
+
+/* Loading spinner */
+.loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #26a69a;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 2s linear infinite;
+    margin: 15px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
