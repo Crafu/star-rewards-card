@@ -443,12 +443,14 @@ function addNewTask() {
         return;
     }
     
-    // Create new task object
-   // Create new task object
+// First get the current timestamp
+const timestamp = new Date();
+
+// Create new task object
 const newTask = {
     description: taskDescription,
     completed: false,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    createdAt: timestamp
 };
 
 // Add task to Firestore
