@@ -845,7 +845,7 @@ function getRandomReward() {
     const customRewards = currentCardData.rewards.custom || [];
     const amazonProducts = currentCardData.rewards.amazon || [];
     
-    if (customRewardsif (customRewards.length === 0 && amazonProducts.length === 0) {
+    if (customRewards.length === 0 && amazonProducts.length === 0) {
         return {
             type: 'custom',
             content: 'No rewards available. Please add some rewards first.'
