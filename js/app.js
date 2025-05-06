@@ -444,21 +444,17 @@ function addNewTask() {
     }
     
     // Create new task object
-    const newTask = {
-        description: taskDescription,
-        completed: false,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    };
-    
-    // Initialize tasks array if it doesn't exist
-    if (!currentCardData.tasks) {
-        currentCardData.tasks = [];
-    }
-    
-    // Add task to Firestore
-    db.collection('rewardCards').doc(currentCardId).update({
-        tasks: firebase.firestore.FieldValue.arrayUnion(newTask)
-    })
+   // Create new task object
+const newTask = {
+    description: taskDescription,
+    completed: false,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+};
+
+// Add task to Firestore
+db.collection('rewardCards').doc(currentCardId).update({
+    tasks: firebase.firestore.FieldValue.arrayUnion(newTask)
+})
     .then(() => {
         // Update local data
         currentCardData.tasks.push(newTask);
