@@ -759,6 +759,7 @@ function extractAmazonProductId(url) {
 
 // Fetch Amazon product details and add to rewards
 // Fetch Amazon product details and add to rewards
+// Fetch Amazon product details and add to rewards
 async function addAmazonProduct() {
     const productUrl = amazonProductUrl.value.trim();
     if (!productUrl) {
@@ -775,15 +776,15 @@ async function addAmazonProduct() {
             throw new Error("Invalid Amazon product URL. Please ensure it's a valid product page.");
         }
         
-        // Use mock data instead of API call for now
-        console.log("Using mock data for product ID:", productId);
+        // Call your API to get real product data
+        const apiUrl = 'https://star-rewards-card-l7dltuv3h-crafus-projects.vercel.app/api/amazon-product';
+        const response = await fetch(`${apiUrl}?id=${productId}`);
         
-        const mockProductData = {
-            title: `Amazon Product ${productId}`,
-            price: "$29.99",
-            image: `https://via.placeholder.com/150?text=Product+${productId}`,
-            url: productUrl
-        };
+        if (!response.ok) {
+            throw new Error("Failed to fetch product details");
+        }
+        
+        const productData = await response.json();
         
         // Initialize rewards if they don't exist
         if (!currentCardData.rewards) {
@@ -795,11 +796,11 @@ async function addAmazonProduct() {
         // Add product to Firestore
         const cardRef = db.collection('rewardCards').doc(currentCardId);
         cardRef.update({
-            'rewards.amazon': firebase.firestore.FieldValue.arrayUnion(mockProductData)
+            'rewards.amazon': firebase.firestore.FieldValue.arrayUnion(productData)
         })
         .then(() => {
             // Update local data
-            currentCardData.rewards.amazon.push(mockProductData);
+            currentCardData.rewards.amazon.push(productData);
             
             // Clear input
             amazonProductUrl.value = '';
