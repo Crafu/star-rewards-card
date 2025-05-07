@@ -758,6 +758,7 @@ function extractAmazonProductId(url) {
 }
 
 // Fetch Amazon product details and add to rewards// Fetch Amazon product details and add to rewards
+// Fetch Amazon product details and add to rewards
 async function addAmazonProduct() {
     const productUrl = amazonProductUrl.value.trim();
     if (!productUrl) {
@@ -774,27 +775,15 @@ async function addAmazonProduct() {
             throw new Error("Invalid Amazon product URL. Please ensure it's a valid product page.");
         }
         
-        // Call directly to your API without a proxy
-        const apiUrl = 'https://star-rewards-card-l7dltuv3h-crafus-projects.vercel.app/api/amazon-product';
-        
-        console.log("Attempting to fetch product data for ID:", productId);
-        
-        // Use fetch with specific no-cors mode and credentials
-        const response = await fetch(`${apiUrl}?id=${productId}`, {
-            method: 'GET',
-            mode: 'cors',
-            credentials: 'omit',
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
+        // Call your PA API endpoint
+        const apiUrl = 'https://star-rewards-card-l7dltuv3h-crafus-projects.vercel.app/api/amazon/product';
+        const response = await fetch(`${apiUrl}?id=${productId}`);
         
         if (!response.ok) {
-            throw new Error(`Failed to fetch product details: ${response.status} ${response.statusText}`);
+            throw new Error("Failed to fetch product details");
         }
         
         const productData = await response.json();
-        console.log("Product data retrieved:", productData);
         
         // Initialize rewards if they don't exist
         if (!currentCardData.rewards) {
