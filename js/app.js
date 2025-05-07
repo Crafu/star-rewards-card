@@ -724,20 +724,30 @@ function deleteCustomReward(index) {
 function extractAmazonProductId(url) {
     try {
         const urlObj = new URL(url);
-        if (!urlObj.hostname.includes('amazon')) {
-            return null; // Not an Amazon URL
+        
+        // Handle amazon.com URLs
+        if (urlObj.hostname.includes('amazon')) {
+            // Try to extract product ID from path for regular URLs
+            const pathMatch = urlObj.pathname.match(/\/dp\/([A-Z0-9]{10})/i);
+            if (pathMatch && pathMatch[1]) {
+                return pathMatch[1];
+            }
+            
+            // Try to extract from query parameters
+            const asinParam = urlObj.searchParams.get('asin');
+            if (asinParam) {
+                return asinParam;
+            }
         }
         
-        // Try to extract product ID from path
-        const pathMatch = urlObj.pathname.match(/\/dp\/([A-Z0-9]{10})/i);
-        if (pathMatch && pathMatch[1]) {
-            return pathMatch[1];
-        }
-        
-        // Try to extract from query parameters
-        const asinParam = urlObj.searchParams.get('asin');
-        if (asinParam) {
-            return asinParam;
+        // Handle shortened URLs (amzn.eu, amzn.to, etc.)
+        if (urlObj.hostname.includes('amzn.')) {
+            // For shortened URLs like amzn.eu/d/PRODUCTID
+            const pathParts = urlObj.pathname.split('/');
+            // Check if we have a pattern like /d/PRODUCTID
+            if (pathParts.length >= 3 && pathParts[1] === 'd') {
+                return pathParts[2];
+            }
         }
         
         return null;
