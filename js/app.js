@@ -774,8 +774,12 @@ async function addAmazonProduct() {
             throw new Error("Invalid Amazon product URL. Please ensure it's a valid product page.");
         }
         
-        const apiUrl = 'https://star-rewards-card-l7dltuv3h-crafus-projects.vercel.app/api/amazon-product';
-        const response = await fetch(`${apiUrl}?id=${productId}`);
+        // Use a CORS proxy to bypass the CORS restrictions temporarily
+        const apiBaseUrl = 'https://star-rewards-card-l7dltuv3h-crafus-projects.vercel.app/api/amazon-product';
+        const corsProxyUrl = 'https://corsproxy.io/?';
+        const apiUrl = corsProxyUrl + encodeURIComponent(`${apiBaseUrl}?id=${productId}`);
+        
+        const response = await fetch(apiUrl);
         
         if (!response.ok) {
             throw new Error("Failed to fetch product details");
