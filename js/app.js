@@ -764,20 +764,14 @@ async function addAmazonProduct() {
             throw new Error("Invalid Amazon product URL. Please ensure it's a valid product page.");
         }
         
-        // In a real implementation, you would call your own proxy server:
-        // const response = await fetch(`https://your-api.vercel.app/api/amazon-product?id=${productId}`);
-        // const productData = await response.json();
+        const apiUrl = 'https://star-rewards-card-l7dltuv3h-crafus-projects.vercel.app/api/amazon-product';
+        const response = await fetch(`${apiUrl}?id=${productId}`);
         
-        // For now, simulate a response with mock data
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
+        if (!response.ok) {
+            throw new Error("Failed to fetch product details");
+        }
         
-        // Mock data for demonstration
-        const mockProductData = {
-            title: `Amazon Product ${productId}`,
-            price: "$" + (Math.floor(Math.random() * 100) + 9.99).toFixed(2),
-            image: `https://via.placeholder.com/150?text=Product+${productId}`,
-            url: productUrl
-        };
+        const productData = await response.json();
         
         // Initialize rewards if they don't exist
         if (!currentCardData.rewards) {
@@ -789,11 +783,11 @@ async function addAmazonProduct() {
         // Add product to Firestore
         const cardRef = db.collection('rewardCards').doc(currentCardId);
         cardRef.update({
-            'rewards.amazon': firebase.firestore.FieldValue.arrayUnion(mockProductData)
+            'rewards.amazon': firebase.firestore.FieldValue.arrayUnion(productData)
         })
         .then(() => {
             // Update local data
-            currentCardData.rewards.amazon.push(mockProductData);
+            currentCardData.rewards.amazon.push(productData);
             
             // Clear input
             amazonProductUrl.value = '';
