@@ -774,18 +774,16 @@ async function addAmazonProduct() {
             throw new Error("Invalid Amazon product URL. Please ensure it's a valid product page.");
         }
         
-        // Use a CORS proxy to bypass the CORS restrictions temporarily
-        const apiBaseUrl = 'https://star-rewards-card-l7dltuv3h-crafus-projects.vercel.app/api/amazon-product';
-        const corsProxyUrl = 'https://corsproxy.io/?';
-        const apiUrl = corsProxyUrl + encodeURIComponent(`${apiBaseUrl}?id=${productId}`);
+        // Temporarily use mock data instead of trying to fetch from the API
+        // This will allow you to test other features while you fix the API
+        console.log("Using mock data for product ID:", productId);
         
-        const response = await fetch(apiUrl);
-        
-        if (!response.ok) {
-            throw new Error("Failed to fetch product details");
-        }
-        
-        const productData = await response.json();
+        const mockProductData = {
+            title: `Amazon Product ${productId}`,
+            price: "$29.99",
+            image: `https://via.placeholder.com/150?text=Product+${productId}`,
+            url: productUrl
+        };
         
         // Initialize rewards if they don't exist
         if (!currentCardData.rewards) {
@@ -797,11 +795,11 @@ async function addAmazonProduct() {
         // Add product to Firestore
         const cardRef = db.collection('rewardCards').doc(currentCardId);
         cardRef.update({
-            'rewards.amazon': firebase.firestore.FieldValue.arrayUnion(productData)
+            'rewards.amazon': firebase.firestore.FieldValue.arrayUnion(mockProductData)
         })
         .then(() => {
             // Update local data
-            currentCardData.rewards.amazon.push(productData);
+            currentCardData.rewards.amazon.push(mockProductData);
             
             // Clear input
             amazonProductUrl.value = '';
