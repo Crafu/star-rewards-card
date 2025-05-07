@@ -758,8 +758,6 @@ function extractAmazonProductId(url) {
 }
 
 // Fetch Amazon product details and add to rewards
-// Fetch Amazon product details and add to rewards
-// Fetch Amazon product details and add to rewards
 async function addAmazonProduct() {
     const productUrl = amazonProductUrl.value.trim();
     if (!productUrl) {
@@ -776,15 +774,25 @@ async function addAmazonProduct() {
             throw new Error("Invalid Amazon product URL. Please ensure it's a valid product page.");
         }
         
-        // Call your API to get real product data
+        // Use a reliable CORS proxy service
         const apiUrl = 'https://star-rewards-card-l7dltuv3h-crafus-projects.vercel.app/api/amazon-product';
-        const response = await fetch(`${apiUrl}?id=${productId}`);
+        const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+        const proxyUrl = corsProxy + apiUrl + `?id=${productId}`;
+        
+        console.log("Attempting to fetch via CORS proxy:", proxyUrl);
+        
+        const response = await fetch(proxyUrl, {
+            headers: {
+                'Origin': 'https://crafu.github.io'
+            }
+        });
         
         if (!response.ok) {
-            throw new Error("Failed to fetch product details");
+            throw new Error(`Failed to fetch product details: ${response.status} ${response.statusText}`);
         }
         
         const productData = await response.json();
+        console.log("Product data retrieved:", productData);
         
         // Initialize rewards if they don't exist
         if (!currentCardData.rewards) {
@@ -819,58 +827,6 @@ async function addAmazonProduct() {
     } finally {
         // Hide loading indicator
         amazonLoading.style.display = 'none';
-    }
-}
-
-// Delete an Amazon product
-function deleteAmazonProduct(index) {
-    // Get the product to delete
-    const productToDelete = currentCardData.rewards.amazon[index];
-    
-    // Remove from Firestore
-    const cardRef = db.collection('rewardCards').doc(currentCardId);
-    cardRef.update({
-        'rewards.amazon': firebase.firestore.FieldValue.arrayRemove(productToDelete)
-    })
-    .then(() => {
-        // Update local data
-        currentCardData.rewards.amazon.splice(index, 1);
-        
-        // Reload products
-        loadAmazonProducts();
-    })
-    .catch(error => {
-        console.error("Error deleting product:", error);
-        alert("Error deleting product. Please try again.");
-    });
-}
-
-// Get random reward from either custom or Amazon list
-function getRandomReward() {
-    const customRewards = currentCardData.rewards.custom || [];
-    const amazonProducts = currentCardData.rewards.amazon || [];
-    
-    if (customRewards.length === 0 && amazonProducts.length === 0) {
-        return {
-            type: 'custom',
-            content: 'No rewards available. Please add some rewards first.'
-        };
-    }
-    
-    const combinedRewards = [...customRewards, ...amazonProducts];
-    const randomIndex = Math.floor(Math.random() * combinedRewards.length);
-    
-    if (randomIndex < customRewards.length) {
-        return {
-            type: 'custom',
-            content: customRewards[randomIndex]
-        };
-    } else {
-        const amazonProduct = amazonProducts[randomIndex - customRewards.length];
-        return {
-            type: 'amazon',
-            content: amazonProduct
-        };
     }
 }
 
