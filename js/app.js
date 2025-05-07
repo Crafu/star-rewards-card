@@ -759,6 +759,7 @@ function extractAmazonProductId(url) {
 
 // Fetch Amazon product details and add to rewards// Fetch Amazon product details and add to rewards
 // Fetch Amazon product details and add to rewards
+// Fetch Amazon product details and add to rewards
 async function addAmazonProduct() {
     const productUrl = amazonProductUrl.value.trim();
     if (!productUrl) {
@@ -776,7 +777,7 @@ async function addAmazonProduct() {
         }
         
         // Call your PA API endpoint
-        const apiUrl = 'https://star-rewards-card-l7dltuv3h-crafus-projects.vercel.app/api/amazon/product';
+        const apiUrl = 'https://star-rewards-card-l7dltuv3h-crafus-projects.vercel.app/api/amazon-product';
         const response = await fetch(`${apiUrl}?id=${productId}`);
         
         if (!response.ok) {
