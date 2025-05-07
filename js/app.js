@@ -758,6 +758,7 @@ function extractAmazonProductId(url) {
 }
 
 // Fetch Amazon product details and add to rewards
+// Fetch Amazon product details and add to rewards
 async function addAmazonProduct() {
     const productUrl = amazonProductUrl.value.trim();
     if (!productUrl) {
@@ -774,8 +775,7 @@ async function addAmazonProduct() {
             throw new Error("Invalid Amazon product URL. Please ensure it's a valid product page.");
         }
         
-        // Temporarily use mock data instead of trying to fetch from the API
-        // This will allow you to test other features while you fix the API
+        // Use mock data instead of API call for now
         console.log("Using mock data for product ID:", productId);
         
         const mockProductData = {
