@@ -757,7 +757,7 @@ function extractAmazonProductId(url) {
     }
 }
 
-// Fetch Amazon product details and add to rewards
+// Fetch Amazon product details and add to rewards// Fetch Amazon product details and add to rewards
 async function addAmazonProduct() {
     const productUrl = amazonProductUrl.value.trim();
     if (!productUrl) {
@@ -774,16 +774,18 @@ async function addAmazonProduct() {
             throw new Error("Invalid Amazon product URL. Please ensure it's a valid product page.");
         }
         
-        // Use a reliable CORS proxy service
+        // Call directly to your API without a proxy
         const apiUrl = 'https://star-rewards-card-l7dltuv3h-crafus-projects.vercel.app/api/amazon-product';
-        const corsProxy = 'https://cors-anywhere.herokuapp.com/';
-        const proxyUrl = corsProxy + apiUrl + `?id=${productId}`;
         
-        console.log("Attempting to fetch via CORS proxy:", proxyUrl);
+        console.log("Attempting to fetch product data for ID:", productId);
         
-        const response = await fetch(proxyUrl, {
+        // Use fetch with specific no-cors mode and credentials
+        const response = await fetch(`${apiUrl}?id=${productId}`, {
+            method: 'GET',
+            mode: 'cors',
+            credentials: 'omit',
             headers: {
-                'Origin': 'https://crafu.github.io'
+                'Accept': 'application/json'
             }
         });
         
@@ -829,7 +831,6 @@ async function addAmazonProduct() {
         amazonLoading.style.display = 'none';
     }
 }
-
 // Display random reward in the result modal
 function displayRandomReward() {
     const reward = getRandomReward();
